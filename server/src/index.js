@@ -17,6 +17,7 @@ app.use(cors());
 
 app.get('/rooms/:id', (req, res) => {
     const {id:roomId} = req.params
+
     const obj = {
         users: [...rooms.get(roomId).get('users').values()],
         messages: [...rooms.get(roomId).get('messages')]
@@ -30,7 +31,6 @@ const rooms = new Map()
 
 app.post('/', (req, res) => {
     const {roomId, userName} = req.body
-    const { id } = req.params
     if (!rooms.has(roomId)) {
         rooms.set(
             roomId,
@@ -46,13 +46,24 @@ app.post('/', (req, res) => {
 
 
 io.on("connection", (socket) => {
+
+
     socket.on('ROOM:JOIN', ({roomId, userName}) => {
         socket.join(roomId)
         rooms.get(roomId).get('users').set(socket.id, userName)
         /// values -> get UserName instead of socket.id
-
         const users =  [...rooms.get(roomId).get('users').values()]
         socket.to(roomId).emit('ROOM:JOINED', users)
+    })
+
+
+    socket.on('ROOM:SEND_MESSAGE', ({userName, messageArea, roomId}) => {
+        socket.join(roomId)
+        rooms.get(roomId).get('messages').push({userName, messageArea})
+        /// values -> get UserName instead of socket.id
+        const messages =  [...rooms.get(roomId).get('messages')]
+        socket.to(roomId).emit('ROOM:MESSAGE_SENT', messages)
+        console.log(messages)
     })
 
 
@@ -61,7 +72,7 @@ io.on("connection", (socket) => {
         rooms.forEach((value, roomId) => {
             if (value.get('users').delete(socket.id)) {
                 const users =  [...value.get('users').values()]
-                socket.to(roomId).emit('ROOM:LEAVE', users)
+                socket.to(roomId).emit('ROOM:JOINED', users)
             }
         })
     })

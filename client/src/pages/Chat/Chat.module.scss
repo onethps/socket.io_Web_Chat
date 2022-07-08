@@ -1,0 +1,99 @@
+@import "src/styles/variables";
+
+
+.root {
+  display: flex;
+  width: 700px;
+  min-height: 200px;
+  margin: 5% auto;
+
+
+
+
+  .sideBar {
+    flex: 1;
+    background: $sidebarBGColor;
+    border: 1px $blackOpacity;
+    padding: 10px 0;
+
+    & h4 {
+      font-size: 12px;
+      font-weight: 400;
+      text-align: left;
+      padding: 0 10px;
+    }
+
+    .userStyle {
+      margin: 10px;
+      padding: 5px;
+      font-size: 12px;
+      border-radius: 20px;
+      background: $backgroundColor;
+
+    }
+
+  }
+
+  .mainChat {
+    display: flex;
+    flex-direction: column;
+    flex: 4;
+    background: white;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding: 20px;
+
+
+    .messageItem {
+      margin: 0 60px;
+
+
+      .messageStyle {
+        padding: 10px;
+        background-color: $buttonBG;
+        color: white;
+        border-radius: 10px;
+        flex-wrap: wrap;
+        text-align: left;
+      }
+
+      & span {
+        display: block;
+        text-align: left;
+        padding: 5px 0;
+        font-size: 10px;
+        width: 100%;
+      }
+
+    }
+
+
+    .textAreaBlock{
+      width: 100%;
+      display: flex;
+      gap: 10px;
+      padding: 10px;
+
+      & textarea {
+        border: none;
+        padding: 5px 20px;
+        background: $sidebarBGColor;
+        border-radius: 10px;
+        width: 100%;
+        resize: none;
+        outline: none;
+      }
+
+      & button {
+        border: none;
+        background-color: $buttonBG;
+        color: white;
+        border-radius: 10px;
+        padding: 0 20px;
+      }
+
+    }
+
+
+  }
+}
