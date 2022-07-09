@@ -17,7 +17,6 @@ app.use(cors());
 
 app.get('/rooms/:id', (req, res) => {
     const {id:roomId} = req.params
-
     const obj = {
         users: [...rooms.get(roomId).get('users').values()],
         messages: [...rooms.get(roomId).get('messages')]
@@ -63,12 +62,15 @@ io.on("connection", (socket) => {
         /// values -> get UserName instead of socket.id
         const messages =  [...rooms.get(roomId).get('messages')]
         socket.to(roomId).emit('ROOM:MESSAGE_SENT', messages)
-        console.log(messages)
+
     })
 
 
 
     socket.on('disconnect', () => {
+        console.log('user disconnect', socket.id)
+
+
         rooms.forEach((value, roomId) => {
             if (value.get('users').delete(socket.id)) {
                 const users =  [...value.get('users').values()]
@@ -77,7 +79,7 @@ io.on("connection", (socket) => {
         })
     })
 
-    console.log('user connected', socket.id)
+
 
 });
 
