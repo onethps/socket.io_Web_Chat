@@ -2,7 +2,6 @@ import React, { ChangeEvent, FC, useEffect, useState } from 'react';
 // @ts-ignore
 import s from './Chat.module.scss'
 import { io } from "socket.io-client";
-import { getRandomOptions } from "../../utils/avatarRandomaizer";
 
 type ChatType = {
   roomId:string
@@ -27,8 +26,7 @@ const Chat:FC<ChatType> = ({roomId, userName, messages, onlineUsers, setMessages
 
   const sendMessage = () => {
     socket.emit('ROOM:SEND_MESSAGE',  {userName, messageArea, roomId})
-    let randomAva = getRandomOptions()
-    setMessages([...messages,{userName: userName, messageArea:messageArea, avatar: {...randomAva} }])
+    setMessages([...messages,{userName: userName, messageArea:messageArea }])
     setMessageArea('')
   }
 
@@ -40,7 +38,7 @@ const Chat:FC<ChatType> = ({roomId, userName, messages, onlineUsers, setMessages
   },[])
 
   return (
-    <div>
+    <>
 
       <div className={s.root}>
 
@@ -57,27 +55,32 @@ const Chat:FC<ChatType> = ({roomId, userName, messages, onlineUsers, setMessages
           )}
 
         </div>
-        <div className={s.mainChat}>
-          {messages.map((messages:any, index:number) =>
-            <div key={index} className={s.messageItem}>
-              <div className={s.userMessageBox}>
-                <div className={s.userMessageAva}></div>
-                <div className={s.messageStyle}>{messages.messageArea}</div>
-              </div>
-              <span>{messages.userName}</span>
 
-            </div>
-          )}
+        <div className={s.chatBox}>
+          <div className={s.mainChat}>
+            {messages.map((messages:any, index:number) =>
+              <div key={index} className={s.messageItem}>
+                <div className={s.userMessageBox}>
+                  <div className={s.userAvaAndName}>
+                    <div className={s.userMessageAva}></div>
+                    <span>{messages.userName}</span>
+                  </div>
+                  <div className={s.messageStyle}>{messages.messageArea}</div>
+                </div>
+
+
+              </div>
+            )}
+          </div>
           <div className={s.textAreaBlock}>
             <textarea rows={2} placeholder={'Write new Message....'} onChange={sendMessageAreaHandle} value={messageArea}></textarea>
             <button onClick={sendMessage}>Send</button>
           </div>
         </div>
 
-
       </div>
 
-    </div>
+    </>
   );
 };
 

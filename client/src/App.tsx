@@ -1,10 +1,8 @@
 import './App.css';
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { io } from 'socket.io-client'
 import { Auth } from "../src/pages/Auth/Auth";
 import Chat from "../src/pages/Chat/Chat";
-import { BigHead } from "@bigheads/core";
-import { getRandomOptions } from "../src/utils/avatarRandomaizer";
 
 
 var socket = io('http://localhost:3000/');
@@ -21,10 +19,6 @@ export function App() {
   const [messages, setMessages] = useState<any[]>([])
 
 
-
-  useEffect(() => {
-
-  },[])
 
 
 
